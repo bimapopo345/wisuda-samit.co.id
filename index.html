@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulir dengan Musik Latar</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            overflow: hidden;
+        }
+
+        #form-container {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        iframe.form {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        #welcome-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+            background-color: #f0f4f9;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #welcome-screen h1 {
+            color: #333;
+        }
+
+        #start-button {
+            padding: 15px 30px;
+            font-size: 18px;
+            color: white;
+            background-color: #4285F4;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #start-button:hover {
+            background-color: #357ae8;
+        }
+
+        /* Player musik akan dibuat oleh API di div ini, dan posisinya akan jauh di luar layar */
+        #music-player-container {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="welcome-screen">
+        <h1>Selamat Datang!</h1>
+        <p>Musik akan diputar saat Anda mengisi formulir.</p>
+        <button id="start-button">Mulai Isi Formulir</button>
+    </div>
+
+    <div id="form-container">
+        <iframe class="form"
+            src="https://docs.google.com/forms/d/e/1FAIpQLScGVHG4PM06VSHLAa5KlJ8v0eNp2nsnr_QWvhie3vzvy1aZPw/viewform?embedded=true">Memuat…</iframe>
+    </div>
+
+    <div id="music-player-container"></div>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+    <script>
+        // Ambil elemen-elemen yang dibutuhkan
+        const startButton = document.getElementById('start-button');
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const formContainer = document.getElementById('form-container');
+        const videoID = 'hxBYw5g9hEE'; // Cukup ID videonya saja
+
+        // Variabel untuk menampung objek player YouTube
+        let player;
+
+        // 3. Fungsi ini akan dipanggil secara otomatis oleh API YouTube setelah scriptnya termuat
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('music-player-container', {
+                height: '1', // Ukuran bisa sangat kecil
+                width: '1',
+                videoId: videoID,
+                playerVars: {
+                    'autoplay': 0,    // Autoplay dinonaktifkan di awal
+                    'controls': 0,    // Sembunyikan kontrol player
+                    'loop': 1,        // Aktifkan loop
+                    'playlist': videoID // Diperlukan agar loop berfungsi untuk satu video
+                },
+                events: {
+                    // Anda bisa menambahkan event lain di sini jika perlu
+                }
+            });
+        }
+
+        // 4. Tambahkan event listener saat tombol diklik
+        startButton.addEventListener('click', () => {
+            // Sembunyikan halaman sambutan
+            welcomeScreen.style.display = 'none';
+
+            // Tampilkan kontainer formulir
+            formContainer.style.display = 'block';
+
+            // Perintahkan player untuk memutar video
+            // Ini adalah cara yang paling andal
+            if (player) {
+                player.playVideo();
+            }
+        });
+    </script>
+</body>

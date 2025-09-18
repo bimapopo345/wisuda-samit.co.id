@@ -9,6 +9,7 @@ function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [error, setError] = useState(null);
+  const [viewMode, setViewMode] = useState('card'); // 'card' or 'table'
   const navigate = useNavigate();
 
   // Mock data based on your Google Sheets structure
@@ -314,12 +315,28 @@ function AdminDashboard() {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="search-input"
               />
-              <button className="refresh-btn" onClick={fetchGoogleSheetsData}>
-                🔄 Refresh
-              </button>
-              <button className="export-btn" onClick={handleExportData}>
-                📊 Export CSV
-              </button>
+              <div className="action-buttons">
+                <div className="view-toggle">
+                  <button 
+                    className={`toggle-btn ${viewMode === 'card' ? 'active' : ''}`}
+                    onClick={() => setViewMode('card')}
+                  >
+                    📋 Card View
+                  </button>
+                  <button 
+                    className={`toggle-btn ${viewMode === 'table' ? 'active' : ''}`}
+                    onClick={() => setViewMode('table')}
+                  >
+                    📊 Table View
+                  </button>
+                </div>
+                <button className="refresh-btn" onClick={fetchGoogleSheetsData}>
+                  🔄 Refresh
+                </button>
+                <button className="export-btn" onClick={handleExportData}>
+                  📊 Export CSV
+                </button>
+              </div>
             </div>
             <div className="search-info">
               Menampilkan {filteredStudents.length} dari {studentsData.length} siswa
@@ -328,38 +345,89 @@ function AdminDashboard() {
           </div>
         </div>
 
-        <div className="students-grid">
-          {filteredStudents.map(student => (
-            <div key={student.id} className="student-card">
-              <div className="student-header">
-                <h3>{student.namaLengkap}</h3>
-                <span className="timestamp">{student.timestamp}</span>
-              </div>
-              
-              <div className="student-info">
-                <div className="info-item">
-                  <strong>Berapa bersaudara:</strong> {student.berapaBersaudara} (Anak ke-{student.anakKe})
+        {viewMode === 'card' ? (
+          <div className="students-grid">
+            {filteredStudents.map(student => (
+              <div key={student.id} className="student-card">
+                <div className="student-header">
+                  <h3>{student.namaLengkap}</h3>
+                  <span className="timestamp">{student.timestamp}</span>
                 </div>
-                <div className="info-item">
-                  <strong>Bapak & Ibu Kandung:</strong> {student.orangTuaLengkap}
+                
+                <div className="student-info">
+                  <div className="info-item">
+                    <strong>Berapa bersaudara:</strong> {student.berapaBersaudara} (Anak ke-{student.anakKe})
+                  </div>
+                  <div className="info-item">
+                    <strong>Bapak & Ibu Kandung:</strong> {student.orangTuaLengkap}
+                  </div>
+                  <div className="info-item">
+                    <strong>Orang paling bernilai:</strong> {student.orangBernilai}
+                  </div>
+                  <div className="info-item message">
+                    <strong>Ingin katakan:</strong> "{student.inginKatakan}"
+                  </div>
                 </div>
-                <div className="info-item">
-                  <strong>Orang paling bernilai:</strong> {student.orangBernilai}
-                </div>
-                <div className="info-item message">
-                  <strong>Ingin katakan:</strong> "{student.inginKatakan}"
-                </div>
-              </div>
 
-              <button 
-                className="view-detail-btn"
-                onClick={() => handleViewDetail(student)}
-              >
-                👁️ Lihat Detail
-              </button>
+                <button 
+                  className="view-detail-btn"
+                  onClick={() => handleViewDetail(student)}
+                >
+                  👁️ Lihat Detail
+                </button>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="table-container">
+            <div className="table-wrapper">
+              <table className="students-table">
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>Timestamp</th>
+                    <th>Nama Lengkap</th>
+                    <th>Bersaudara</th>
+                    <th>Anak Ke</th>
+                    <th>Orang Tua</th>
+                    <th>Orang Bernilai</th>
+                    <th>Pesan</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredStudents.map((student, index) => (
+                    <tr key={student.id}>
+                      <td>{index + 1}</td>
+                      <td className="timestamp-cell">{student.timestamp}</td>
+                      <td className="name-cell">{student.namaLengkap}</td>
+                      <td>{student.berapaBersaudara}</td>
+                      <td>{student.anakKe}</td>
+                      <td>{student.orangTuaLengkap}</td>
+                      <td className="valuable-person-cell">{student.orangBernilai}</td>
+                      <td className="message-cell">
+                        <span className="message-preview">
+                          {student.inginKatakan.length > 50 
+                            ? student.inginKatakan.substring(0, 50) + '...' 
+                            : student.inginKatakan}
+                        </span>
+                      </td>
+                      <td>
+                        <button 
+                          className="table-detail-btn"
+                          onClick={() => handleViewDetail(student)}
+                          title="Lihat Detail"
+                        >
+                          👁️
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          ))}
-        </div>
+          </div>
+        )}
 
         {filteredStudents.length === 0 && (
           <div className="no-results">

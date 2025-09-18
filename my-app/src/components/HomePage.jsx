@@ -130,44 +130,65 @@ function HomePage() {
       });
     }
 
-    // Backup: start music on ANY user interaction
+    // Backup: start music on ANY user interaction - NEVER REMOVE LISTENERS!
     const handleUserInteraction = () => {
-      if (!userInteracted) {
+      console.log('🎯 User interaction detected! Current playing status:', isPlaying);
+      
+      if (audio && !isPlaying) {
         setUserInteracted(true);
-        console.log('User interaction detected, attempting to play audio...');
+        console.log('🚀 Attempting to start audio after user interaction...');
         
-        if (audio) {
-          // Force play audio after user interaction
-          audio.play().then(() => {
-            setIsPlaying(true);
-            console.log('✅ Audio started successfully after user interaction');
-          }).catch(error => {
-            console.log('❌ Still failed to play audio:', error);
-            // Try again after a short delay
-            setTimeout(() => {
-              audio.play().then(() => {
-                setIsPlaying(true);
-                console.log('✅ Audio started on retry');
-              }).catch(e => console.log('❌ Retry failed:', e));
-            }, 100);
-          });
-        }
+        // Force unmute and play
+        audio.muted = false;
+        audio.volume = 0.7;
+        setIsMuted(false);
         
-        // Remove listeners after first interaction
-        document.removeEventListener('click', handleUserInteraction);
-        document.removeEventListener('touchstart', handleUserInteraction);
-        document.removeEventListener('keydown', handleUserInteraction);
-        document.removeEventListener('mousemove', handleUserInteraction);
-        document.removeEventListener('scroll', handleUserInteraction);
+        audio.play().then(() => {
+          setIsPlaying(true);
+          console.log('✅ Audio started successfully after user interaction');
+        }).catch(error => {
+          console.log('❌ First attempt failed, trying aggressive method:', error);
+          
+          // Aggressive retry
+          setTimeout(() => {
+            audio.load();
+            audio.muted = false;
+            audio.volume = 0.7;
+            audio.currentTime = 0;
+            audio.play().then(() => {
+              setIsPlaying(true);
+              setIsMuted(false);
+              console.log('✅ Audio started on aggressive retry');
+            }).catch(e => console.log('❌ All attempts failed:', e));
+          }, 100);
+        });
+      } else if (audio && isPlaying && audio.muted) {
+        // If playing but muted, just unmute
+        audio.muted = false;
+        setIsMuted(false);
+        console.log('🔊 Audio unmuted on user interaction');
       }
     };
 
-    // Add multiple event listeners for user interaction
-    document.addEventListener('click', handleUserInteraction);
-    document.addEventListener('touchstart', handleUserInteraction);
-    document.addEventListener('keydown', handleUserInteraction);
-    document.addEventListener('mousemove', handleUserInteraction);
-    document.addEventListener('scroll', handleUserInteraction);
+    // Add multiple event listeners for user interaction - PERSISTENT!
+    const addPersistentListeners = () => {
+      document.addEventListener('click', handleUserInteraction, { passive: true });
+      document.addEventListener('touchstart', handleUserInteraction, { passive: true });
+      document.addEventListener('keydown', handleUserInteraction, { passive: true });
+      document.addEventListener('mousemove', handleUserInteraction, { passive: true });
+      document.addEventListener('scroll', handleUserInteraction, { passive: true });
+      console.log('🎧 Persistent audio listeners added');
+    };
+    
+    addPersistentListeners();
+    
+    // Re-add listeners every 5 seconds to ensure they persist
+    const persistentInterval = setInterval(() => {
+      if (!isPlaying) {
+        console.log('🔄 Re-ensuring audio listeners are active');
+        addPersistentListeners();
+      }
+    }, 5000);
 
     // Hide welcome overlay after 5 seconds
     const timer = setTimeout(() => {
@@ -201,12 +222,9 @@ function HomePage() {
     return () => {
       clearTimeout(timer);
       clearInterval(particleInterval);
-      // Clean up event listeners
-      document.removeEventListener('click', handleUserInteraction);
-      document.removeEventListener('touchstart', handleUserInteraction);
-      document.removeEventListener('keydown', handleUserInteraction);
-      document.removeEventListener('mousemove', handleUserInteraction);
-      document.removeEventListener('scroll', handleUserInteraction);
+      clearInterval(persistentInterval);
+      // DON'T remove event listeners - keep them active always!
+      console.log('🧹 Component cleanup, but keeping audio listeners active');
     };
   }, []);
 
@@ -216,9 +234,31 @@ function HomePage() {
     if (audio) {
       if (isPlaying) {
         audio.pause();
+        console.log('🔇 Audio paused manually');
       } else {
-        audio.play().catch(error => {
-          console.log('Error playing audio:', error);
+        // Force unmute and play
+        audio.muted = false;
+        audio.volume = 0.7;
+        setIsMuted(false);
+        setUserInteracted(true);
+        
+        audio.play().then(() => {
+          setIsPlaying(true);
+          console.log('🔊 Audio started manually');
+        }).catch(error => {
+          console.log('❌ Manual play failed:', error);
+          // Aggressive retry for manual play
+          setTimeout(() => {
+            audio.load();
+            audio.muted = false;
+            audio.volume = 0.7;
+            audio.currentTime = 0;
+            audio.play().then(() => {
+              setIsPlaying(true);
+              setIsMuted(false);
+              console.log('✅ Manual play successful on retry');
+            }).catch(e => console.log('❌ Manual retry failed:', e));
+          }, 100);
         });
       }
     }

@@ -406,7 +406,7 @@ function HomePage() {
         }}
         onError={(e) => console.log("❌ Audio error:", e)}
       >
-        <source src="/Niji.mp3" type="audio/mpeg" />
+        <source src="/memories.mp3" type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
     </div>

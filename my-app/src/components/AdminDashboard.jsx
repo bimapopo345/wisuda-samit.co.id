@@ -221,7 +221,7 @@ function AdminDashboard() {
   };
 
   const handleExportData = () => {
-    // Create CSV content with original form labels
+    // Create Excel-compatible CSV content
     const headers = [
       'Timestamp', 'Nama Lengkap', 'Berapa bersaudara?', 'Anak ke berapa?', 
       'Apakah Bapak & Ibu Kandung masih lengkap?', 'Terakhir tinggal paling lama dengan siapa?', 
@@ -231,26 +231,33 @@ function AdminDashboard() {
       'Kenapa orang tersebut begitu sangat berarti di hidup Kamu?', 'Apa harapan Kamu terhadapnya kedepan?'
     ];
     
+    // Create CSV content with proper escaping
     const csvContent = [
       headers.join(','),
       ...filteredStudents.map(student => [
-        student.timestamp,
-        `"${student.namaLengkap}"`,
-        student.berapaBersaudara,
-        student.anakKe,
-        student.orangTuaLengkap,
-        `"${student.terakhirTinggal}"`,
-        `"${student.dariKecilTinggal}"`,
-        `"${student.orangBernilai}"`,
-        `"${student.inginKatakan}"`,
-        `"${student.akanDiberikan}"`,
-        `"${student.kenapa}"`,
-        `"${student.harapan}"`
+        `"'${student.timestamp}"`, // Add apostrophe prefix to force text in Excel
+        `"${student.namaLengkap.replace(/"/g, '""')}"`,
+        `"${student.berapaBersaudara}"`,
+        `"${student.anakKe}"`,
+        `"${student.orangTuaLengkap.replace(/"/g, '""')}"`,
+        `"${student.terakhirTinggal.replace(/"/g, '""')}"`,
+        `"${student.dariKecilTinggal.replace(/"/g, '""')}"`,
+        `"${student.orangBernilai.replace(/"/g, '""')}"`,
+        `"${student.inginKatakan.replace(/"/g, '""')}"`,
+        `"${student.akanDiberikan.replace(/"/g, '""')}"`,
+        `"${student.kenapa.replace(/"/g, '""')}"`,
+        `"${student.harapan.replace(/"/g, '""')}"`
       ].join(','))
     ].join('\n');
 
-    // Create and download file
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    // Add BOM for proper UTF-8 encoding in Excel
+    const BOM = '\uFEFF';
+    const csvWithBOM = BOM + csvContent;
+    
+    // Create and download as Excel-compatible CSV
+    const blob = new Blob([csvWithBOM], { 
+      type: 'application/vnd.ms-excel;charset=utf-8;' 
+    });
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);
@@ -259,6 +266,9 @@ function AdminDashboard() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    
+    // Show success message
+    alert('✅ Data berhasil di-export ke Excel CSV!\n\n📄 File dapat langsung dibuka dengan Excel\n⏰ Timestamp akan tampil dengan format yang benar');
   };
 
   if (loading) {
@@ -334,7 +344,7 @@ function AdminDashboard() {
                   🔄 Refresh
                 </button>
                 <button className="export-btn" onClick={handleExportData}>
-                  📊 Export CSV
+                  📊 Export Excel
                 </button>
               </div>
             </div>

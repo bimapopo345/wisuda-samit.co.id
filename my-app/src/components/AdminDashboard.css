@@ -70,6 +70,7 @@
   gap: 15px;
   margin-bottom: 15px;
   align-items: flex-start;
+  flex-wrap: wrap;
 }
 
 .search-input {
@@ -100,6 +101,25 @@
   box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
 }
 
+.refresh-btn {
+  background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+  color: white;
+  border: none;
+  padding: 15px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  min-width: 110px;
+}
+
+.refresh-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(23, 162, 184, 0.3);
+}
+
 .search-input:focus {
   outline: none;
   border-color: #667eea;
@@ -110,6 +130,20 @@
   color: #666;
   font-size: 14px;
   font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.data-source {
+  background: #e8f4fd;
+  color: #0066cc;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
 }
 
 /* Students Grid */
@@ -238,6 +272,64 @@
   100% { transform: rotate(360deg); }
 }
 
+.loading-detail {
+  color: #888;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+/* Error Container */
+.error-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  text-align: center;
+  padding: 40px;
+}
+
+.error-container h2 {
+  color: #dc3545;
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+}
+
+.error-container p {
+  color: #666;
+  margin-bottom: 20px;
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+.retry-btn {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+}
+
+.retry-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+}
+
+.fallback-note {
+  background: #fff3cd;
+  color: #856404;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #ffc107;
+  font-size: 14px;
+  margin-top: 20px;
+}
+
 /* Modal */
 .modal-overlay {
   position: fixed;
@@ -363,6 +455,27 @@
     font-size: 1.5rem;
   }
   
+  .search-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .search-input {
+    width: 100%;
+  }
+  
+  .refresh-btn,
+  .export-btn {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .search-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  
   .students-grid {
     grid-template-columns: 1fr;
   }
@@ -379,5 +492,13 @@
   .modal-content {
     margin: 10px;
     max-height: 95vh;
+  }
+  
+  .error-container {
+    padding: 20px;
+  }
+  
+  .error-container h2 {
+    font-size: 1.5rem;
   }
 }

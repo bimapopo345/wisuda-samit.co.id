@@ -8,6 +8,7 @@ function AdminDashboard() {
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedStudent, setSelectedStudent] = useState(null);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   // Mock data based on your Google Sheets structure
@@ -104,13 +105,96 @@ function AdminDashboard() {
     }
   ];
 
-  useEffect(() => {
-    // Simulate loading data
-    setTimeout(() => {
+  // Google Sheets configuration
+  const SHEET_ID = '1z9wIVT8TmbOqeFwJHLUwE2P4mKEKG6g5pjmu1Xdx7Xw';
+  const GID = '895465359';
+  const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${GID}`;
+
+  // Function to fetch data from Google Sheets
+  const fetchGoogleSheetsData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      console.log('🔄 Fetching data from Google Sheets...');
+      
+      // Use a CORS proxy to fetch the data
+      const proxyUrl = 'https://api.allorigins.win/raw?url=';
+      const response = await fetch(proxyUrl + encodeURIComponent(SHEET_URL));
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const csvText = await response.text();
+      console.log('📄 Raw CSV data received:', csvText.substring(0, 200) + '...');
+      
+      // Parse CSV data
+      const rows = csvText.split('\n').filter(row => row.trim());
+      console.log(`📊 Found ${rows.length} rows`);
+      
+      if (rows.length < 2) {
+        throw new Error('No data found in spreadsheet');
+      }
+      
+      // Skip header row and parse data
+      const dataRows = rows.slice(1);
+      const parsedData = dataRows.map((row, index) => {
+        // Parse CSV row handling quoted values
+        const columns = [];
+        let current = '';
+        let inQuotes = false;
+        
+        for (let i = 0; i < row.length; i++) {
+          const char = row[i];
+          if (char === '"') {
+            inQuotes = !inQuotes;
+          } else if (char === ',' && !inQuotes) {
+            columns.push(current.trim());
+            current = '';
+          } else {
+            current += char;
+          }
+        }
+        columns.push(current.trim()); // Add last column
+        
+        // Map to our data structure
+        return {
+          id: index + 1,
+          timestamp: columns[0] || '',
+          namaLengkap: columns[1] || '',
+          berapaBersaudara: columns[2] || '',
+          anakKe: columns[3] || '',
+          orangTuaLengkap: columns[4] || '',
+          terakhirTinggal: columns[5] || '',
+          dariKecilTinggal: columns[6] || '',
+          orangBernilai: columns[7] || '',
+          inginKatakan: columns[8] || '',
+          akanDiberikan: columns[9] || '',
+          kenapa: columns[10] || '',
+          harapan: columns[11] || ''
+        };
+      }).filter(item => item.namaLengkap); // Filter out empty rows
+      
+      console.log(`✅ Parsed ${parsedData.length} student records`);
+      setStudentsData(parsedData);
+      setFilteredStudents(parsedData);
+      
+    } catch (error) {
+      console.error('❌ Error fetching Google Sheets data:', error);
+      setError(error.message);
+      
+      // Fallback to mock data if Google Sheets fails
+      console.log('📦 Falling back to mock data...');
       setStudentsData(mockData);
       setFilteredStudents(mockData);
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
+  };
+
+  useEffect(() => {
+    fetchGoogleSheetsData();
   }, []);
 
   useEffect(() => {
@@ -136,11 +220,14 @@ function AdminDashboard() {
   };
 
   const handleExportData = () => {
-    // Create CSV content
+    // Create CSV content with original form labels
     const headers = [
-      'Timestamp', 'Nama Lengkap', 'Berapa Bersaudara', 'Anak Ke', 
-      'Orang Tua Lengkap', 'Terakhir Tinggal', 'Dari Kecil Tinggal',
-      'Orang Bernilai', 'Ingin Katakan', 'Akan Diberikan', 'Kenapa', 'Harapan'
+      'Timestamp', 'Nama Lengkap', 'Berapa bersaudara?', 'Anak ke berapa?', 
+      'Apakah Bapak & Ibu Kandung masih lengkap?', 'Terakhir tinggal paling lama dengan siapa?', 
+      'Dari kecil hingga dewasa tinggal dengan siapa?', '(Sebutkan satu saja) orang yang paling bernilai di hidup Kamu!', 
+      'Apa yang ingin sekali Kamu katakan saat ini kepada orang tersebut?', 
+      'Jika nanti sukses & semua cita-citamu tercapai, apa yang akan Kamu berikan kepada orang tersebut?', 
+      'Kenapa orang tersebut begitu sangat berarti di hidup Kamu?', 'Apa harapan Kamu terhadapnya kedepan?'
     ];
     
     const csvContent = [
@@ -178,7 +265,28 @@ function AdminDashboard() {
       <div className="admin-dashboard">
         <div className="loading-container">
           <div className="loading-spinner"></div>
-          <p>Loading data siswa...</p>
+          <p>📊 Mengambil data dari Google Sheets...</p>
+          <p className="loading-detail">Mohon tunggu sebentar...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="admin-dashboard">
+        <div className="error-container">
+          <h2>❌ Error Loading Data</h2>
+          <p>Gagal mengambil data dari Google Sheets: {error}</p>
+          <button 
+            className="retry-btn" 
+            onClick={fetchGoogleSheetsData}
+          >
+            🔄 Coba Lagi
+          </button>
+          <p className="fallback-note">
+            📦 Menggunakan data fallback untuk demo
+          </p>
         </div>
       </div>
     );
@@ -201,17 +309,21 @@ function AdminDashboard() {
             <div className="search-header">
               <input
                 type="text"
-                placeholder="🔍 Cari siswa berdasarkan nama, orang bernilai, atau pesan..."
+                placeholder="🔍 Cari siswa berdasarkan nama, orang paling bernilai, atau pesan..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="search-input"
               />
+              <button className="refresh-btn" onClick={fetchGoogleSheetsData}>
+                🔄 Refresh
+              </button>
               <button className="export-btn" onClick={handleExportData}>
                 📊 Export CSV
               </button>
             </div>
             <div className="search-info">
               Menampilkan {filteredStudents.length} dari {studentsData.length} siswa
+              <span className="data-source">📡 Data dari Google Sheets</span>
             </div>
           </div>
         </div>
@@ -226,16 +338,16 @@ function AdminDashboard() {
               
               <div className="student-info">
                 <div className="info-item">
-                  <strong>Bersaudara:</strong> {student.berapaBersaudara} (Anak ke-{student.anakKe})
+                  <strong>Berapa bersaudara:</strong> {student.berapaBersaudara} (Anak ke-{student.anakKe})
                 </div>
                 <div className="info-item">
-                  <strong>Orang Tua:</strong> {student.orangTuaLengkap}
+                  <strong>Bapak & Ibu Kandung:</strong> {student.orangTuaLengkap}
                 </div>
                 <div className="info-item">
-                  <strong>Orang Bernilai:</strong> {student.orangBernilai}
+                  <strong>Orang paling bernilai:</strong> {student.orangBernilai}
                 </div>
                 <div className="info-item message">
-                  <strong>Pesan:</strong> "{student.inginKatakan}"
+                  <strong>Ingin katakan:</strong> "{student.inginKatakan}"
                 </div>
               </div>
 
@@ -274,15 +386,15 @@ function AdminDashboard() {
                     <span>{selectedStudent.namaLengkap}</span>
                   </div>
                   <div className="detail-item">
-                    <label>Berapa Bersaudara:</label>
+                    <label>Berapa bersaudara?</label>
                     <span>{selectedStudent.berapaBersaudara}</span>
                   </div>
                   <div className="detail-item">
-                    <label>Anak Ke:</label>
+                    <label>Anak ke berapa?</label>
                     <span>{selectedStudent.anakKe}</span>
                   </div>
                   <div className="detail-item">
-                    <label>Orang Tua Lengkap:</label>
+                    <label>Apakah Bapak & Ibu Kandung masih lengkap?</label>
                     <span>{selectedStudent.orangTuaLengkap}</span>
                   </div>
                 </div>
@@ -292,37 +404,37 @@ function AdminDashboard() {
                 <h3>🏠 Informasi Tempat Tinggal</h3>
                 <div className="detail-grid">
                   <div className="detail-item">
-                    <label>Terakhir Tinggal Dengan:</label>
+                    <label>Terakhir tinggal paling lama dengan siapa?</label>
                     <span>{selectedStudent.terakhirTinggal}</span>
                   </div>
                   <div className="detail-item">
-                    <label>Dari Kecil Tinggal Dengan:</label>
+                    <label>Dari kecil hingga dewasa tinggal dengan siapa?</label>
                     <span>{selectedStudent.dariKecilTinggal}</span>
                   </div>
                 </div>
               </div>
 
               <div className="detail-section">
-                <h3>❤️ Orang Bernilai</h3>
+                <h3>❤️ Orang yang Paling Bernilai</h3>
                 <div className="detail-grid">
                   <div className="detail-item full-width">
-                    <label>Orang yang Paling Bernilai:</label>
+                    <label>(Sebutkan satu saja) orang yang paling bernilai di hidup Kamu!</label>
                     <span>{selectedStudent.orangBernilai}</span>
                   </div>
                   <div className="detail-item full-width">
-                    <label>Ingin Katakan:</label>
+                    <label>Apa yang ingin sekali Kamu katakan saat ini kepada orang tersebut?</label>
                     <span>"{selectedStudent.inginKatakan}"</span>
                   </div>
                   <div className="detail-item full-width">
-                    <label>Akan Diberikan:</label>
+                    <label>Jika nanti sukses & semua cita-citamu tercapai, apa yang akan Kamu berikan kepada orang tersebut?</label>
                     <span>{selectedStudent.akanDiberikan}</span>
                   </div>
                   <div className="detail-item full-width">
-                    <label>Kenapa Berarti:</label>
+                    <label>Kenapa orang tersebut begitu sangat berarti di hidup Kamu?</label>
                     <span>{selectedStudent.kenapa}</span>
                   </div>
                   <div className="detail-item full-width">
-                    <label>Harapan:</label>
+                    <label>Apa harapan Kamu terhadapnya kedepan?</label>
                     <span>{selectedStudent.harapan}</span>
                   </div>
                 </div>

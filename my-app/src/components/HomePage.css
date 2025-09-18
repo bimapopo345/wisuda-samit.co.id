@@ -80,6 +80,13 @@
   z-index: 10;
 }
 
+.warning-text {
+  font-size: 0.7rem;
+  margin-top: 10px;
+  color: #ffeb3b;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+}
+
 .button-glow {
   position: absolute;
   inset: 0;

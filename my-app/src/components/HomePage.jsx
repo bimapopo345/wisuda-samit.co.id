@@ -220,10 +220,8 @@ function HomePage() {
       }
     }, 5000);
 
-    // Hide welcome overlay after 5 seconds
-    const timer = setTimeout(() => {
-      setShowWelcome(false);
-    }, 5000);
+    // Welcome overlay will stay until user clicks button
+    // Removed auto-timer - user controls when to proceed
 
     // Create particles effect
     const createParticle = () => {
@@ -250,7 +248,6 @@ function HomePage() {
     const particleInterval = setInterval(createParticle, 300);
 
     return () => {
-      clearTimeout(timer);
       clearInterval(particleInterval);
       clearInterval(persistentInterval);
       // DON'T remove event listeners - keep them active always!
@@ -308,8 +305,15 @@ function HomePage() {
           <div className="graduation-cap">🎓</div>
           <div className="welcome-text">第9回サミットの卒業式　</div>
           <div className="subtitle">Wisuda LPK SAMIT</div>
+          {/* Tarok tulisan "Harap Kencangkan Volume Perangkat Kalian Untuk Pengalaman Lebih Baik Diatas Button ( kecil aja )" */}
+          <div className="warning-text">
+            Harap naikkan volume HP Minna-san ya 😇
+          </div>
           <div className="hiraku-button-container">
-            <button className="hiraku-button group" onClick={() => setShowWelcome(false)}>
+            <button
+              className="hiraku-button group"
+              onClick={() => setShowWelcome(false)}
+            >
               <span className="button-text">開く</span>
               <div className="button-glow"></div>
               <div className="button-shine"></div>

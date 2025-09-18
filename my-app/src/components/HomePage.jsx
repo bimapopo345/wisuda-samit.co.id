@@ -349,6 +349,9 @@ function HomePage() {
                 <span className="glitter"></span>
               </div>
             </h2>
+            <div className="family-subtitle">
+              教えてくれませんか。
+            </div>
           </div>
           <div className="family-image-container">
             <img

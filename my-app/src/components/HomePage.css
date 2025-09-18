@@ -347,6 +347,77 @@
   }
 }
 
+/* Family Subtitle with Beautiful Effects */
+.family-subtitle {
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: white;
+  text-shadow: 1px 1px 6px rgba(0,0,0,0.4);
+  letter-spacing: 2px;
+  margin-top: 15px;
+  opacity: 0;
+  animation: fadeInSubtitle 2s ease-in-out 2.5s forwards, gentleFloat 4s ease-in-out infinite;
+  position: relative;
+}
+
+.family-subtitle::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ffeb3b, transparent);
+  transform: translateX(-50%);
+  animation: lineExpand 2s ease-in-out 3s forwards;
+}
+
+.family-subtitle::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ffeb3b, transparent);
+  transform: translateX(-50%);
+  animation: lineExpand 2s ease-in-out 3.2s forwards;
+}
+
+@keyframes fadeInSubtitle {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes gentleFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes lineExpand {
+  0% {
+    width: 0;
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    width: 120%;
+    opacity: 0.8;
+  }
+}
+
 /* Form Container */
 .form-container {
   max-width: 800px;
@@ -392,6 +463,12 @@
   .family-title-container {
     margin-top: 20px;
   }
+  
+  .family-subtitle {
+    font-size: 1.2rem;
+    letter-spacing: 1.5px;
+    margin-top: 12px;
+  }
 
   .graduation-cap {
     font-size: 3rem;
@@ -420,6 +497,12 @@
   
   .family-title-container {
     margin-top: 15px;
+  }
+  
+  .family-subtitle {
+    font-size: 1rem;
+    letter-spacing: 1px;
+    margin-top: 10px;
   }
 
   .graduation-form {

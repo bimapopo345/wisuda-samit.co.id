@@ -282,6 +282,16 @@ function HomePage() {
       <div className="main-content">
         <div className="hero">
           <h1>🎓 Selamat Datang</h1>
+          <div className="family-image-container">
+            <img 
+              src="/family.png" 
+              alt="Keluarga" 
+              className="family-image"
+              onError={(e) => {
+                e.target.style.display = 'none';
+              }}
+            />
+          </div>
         </div>
 
         {/* Google Form Iframe */}

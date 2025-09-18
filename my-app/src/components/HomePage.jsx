@@ -317,6 +317,9 @@ function HomePage() {
       {/* Main Content */}
       <div className="main-content">
         <div className="hero">
+          <div className="text-content">
+            <h1 className="main-heading">家族のこと</h1>
+          </div>
           <div className="family-image-container">
             <img
               src="/keluarga-rame.png"

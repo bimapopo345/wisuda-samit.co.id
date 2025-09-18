@@ -4,39 +4,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form dengan Musik</title>
+    <title>Wisuda - Selamat Atas Pencapaian Anda</title>
     <style>
         body {
             margin: 0;
             padding: 0;
             height: 100vh;
             overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Animasi pembuka */
+        .welcome-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeOut 3s ease-in-out 2s forwards;
+            color: white;
+            text-align: center;
+        }
+
+        .graduation-cap {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+
+        .welcome-text {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            animation: slideIn 1s ease-out 0.5s forwards;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0;
+            animation: slideIn 1s ease-out 1s forwards;
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+
+        @keyframes slideIn {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
         }
 
         iframe.form {
             width: 100%;
             height: 100%;
             border: none;
+            opacity: 0;
+            animation: fadeInForm 1s ease-in-out 3s forwards;
         }
 
-        /* Player disembunyikan */
-        iframe.music {
-            width: 0;
-            height: 0;
-            border: 0;
+        @keyframes fadeInForm {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        audio {
+            display: none;
+        }
+
+        /* Efek partikel untuk suasana wisuda */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: gold;
+            border-radius: 50%;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
         }
     </style>
 </head>
 
 <body>
+    <!-- Overlay pembuka dengan animasi -->
+    <div class="welcome-overlay">
+        <div class="graduation-cap">🎓</div>
+        <div class="welcome-text">Selamat Wisuda!</div>
+        <div class="subtitle">Pencapaian Gemilang Dimulai Dari Sini</div>
+    </div>
+
+    <!-- Efek partikel emas -->
+    <div class="particles" id="particles"></div>
+
     <!-- Google Form -->
     <iframe class="form"
         src="https://docs.google.com/forms/d/e/1FAIpQLScGVHG4PM06VSHLAa5KlJ8v0eNp2nsnr_QWvhie3vzvy1aZPw/viewform?embedded=true">
     </iframe>
 
-    <!-- Musik Local -->
-    <iframe class="music" src="Niji.mp3" allow="autoplay">
-    </iframe>
+    <!-- Musik Background dengan autoplay dan loop -->
+    <audio autoplay loop preload="auto" id="backgroundMusic">
+        <source src="Niji.mp3" type="audio/mpeg" />
+    </audio>
+
+    <script>
+        // Pastikan musik berjalan setelah interaksi pengguna
+        document.addEventListener('DOMContentLoaded', function() {
+            const audio = document.getElementById('backgroundMusic');
+            
+            // Fungsi untuk memulai musik
+            function startMusic() {
+                audio.play().catch(function(error) {
+                    console.log('Audio autoplay prevented:', error);
+                });
+            }
+
+            // Coba mulai musik langsung
+            startMusic();
+
+            // Backup: mulai musik setelah user interaction pertama
+            const startMusicOnInteraction = function() {
+                startMusic();
+                document.removeEventListener('click', startMusicOnInteraction);
+                document.removeEventListener('touchstart', startMusicOnInteraction);
+                document.removeEventListener('keydown', startMusicOnInteraction);
+            };
+
+            document.addEventListener('click', startMusicOnInteraction);
+            document.addEventListener('touchstart', startMusicOnInteraction);
+            document.addEventListener('keydown', startMusicOnInteraction);
+
+            // Buat efek partikel emas
+            function createParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                document.getElementById('particles').appendChild(particle);
+
+                // Hapus partikel setelah animasi selesai
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                }, 5000);
+            }
+
+            // Buat partikel secara berkala
+            setInterval(createParticle, 300);
+        });
+    </script>
 </body>
 
 </html>

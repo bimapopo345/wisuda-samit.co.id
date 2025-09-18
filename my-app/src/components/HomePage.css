@@ -94,38 +94,23 @@
 
 /* Main Content */
 .main-content {
-  padding: 20px;
+  padding: 10px;
   position: relative;
   z-index: 1;
+  width: 100%;
+  max-width: 100%;
 }
 
 .hero {
   text-align: center;
   color: white;
-  padding: 60px 20px 40px;
+  padding: 30px 20px 20px;
 }
 
 .hero h1 {
-  font-size: 3rem;
-  margin-bottom: 20px;
+  font-size: 2rem;
+  margin-bottom: 10px;
   text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-}
-
-.hero p {
-  font-size: 1.2rem;
-  opacity: 0.9;
-  margin-bottom: 20px;
-}
-
-.description {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.description p {
-  font-size: 1rem;
-  opacity: 0.8;
-  line-height: 1.6;
 }
 
 /* Form Container */
@@ -139,7 +124,8 @@
 
 .graduation-form {
   width: 100%;
-  height: 600px;
+  height: 80vh;
+  min-height: 700px;
   border: none;
   border-radius: 10px;
   background: white;
@@ -154,11 +140,7 @@
 /* Responsive */
 @media (max-width: 768px) {
   .hero h1 {
-    font-size: 2rem;
-  }
-  
-  .hero p {
-    font-size: 1rem;
+    font-size: 1.5rem;
   }
   
   .graduation-cap {
@@ -170,7 +152,19 @@
   }
   
   .graduation-form {
-    height: 500px;
+    height: 85vh;
+    min-height: 600px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: 1.3rem;
+  }
+  
+  .graduation-form {
+    height: 90vh;
+    min-height: 550px;
   }
 }
 

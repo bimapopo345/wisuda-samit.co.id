@@ -282,10 +282,6 @@ function HomePage() {
       <div className="main-content">
         <div className="hero">
           <h1>🎓 Selamat Datang</h1>
-          <p>Halaman Utama Aplikasi Wisuda</p>
-          <div className="description">
-            <p>Selamat datang di aplikasi kami. Nikmati pengalaman wisuda yang berkesan!</p>
-          </div>
         </div>
 
         {/* Google Form Iframe */}

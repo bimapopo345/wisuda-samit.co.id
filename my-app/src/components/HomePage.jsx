@@ -306,8 +306,8 @@ function HomePage() {
       {showWelcome && (
         <div className="welcome-overlay">
           <div className="graduation-cap">🎓</div>
-          <div className="welcome-text">Selamat Wisuda!</div>
-          <div className="subtitle">Pencapaian Gemilang Dimulai Dari Sini</div>
+          <div className="welcome-text">第9回サミットの卒業式　</div>
+          <div className="subtitle">Wisuda LPK SAMIT</div>
         </div>
       )}
 
@@ -321,6 +321,16 @@ function HomePage() {
             <h2 className="family-title">
               家族のこと
               <div className="glitter-container">
+                <span className="glitter"></span>
+                <span className="glitter"></span>
+                <span className="glitter"></span>
+                <span className="glitter"></span>
+                <span className="glitter"></span>
+                <span className="glitter"></span>
+                <span className="glitter"></span>
+                <span className="glitter"></span>
+                <span className="glitter"></span>
+                <span className="glitter"></span>
                 <span className="glitter"></span>
                 <span className="glitter"></span>
                 <span className="glitter"></span>

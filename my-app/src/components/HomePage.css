@@ -183,10 +183,19 @@
   font-size: 2.5rem;
   font-weight: 700;
   color: white;
-  text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.5), 0 0 20px rgba(255,255,255,0.5);
   letter-spacing: 3px;
   opacity: 0;
-  animation: fadeInTitle 1.5s ease-in-out 2s forwards;
+  animation: fadeInTitle 1.5s ease-in-out 2s forwards, titleGlow 3s ease-in-out infinite;
+}
+
+@keyframes titleGlow {
+  0%, 100% {
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.5), 0 0 20px rgba(255,255,255,0.5);
+  }
+  50% {
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.5), 0 0 30px rgba(255,255,255,0.8), 0 0 40px rgba(255,235,59,0.6);
+  }
 }
 
 .glitter-container {
@@ -202,46 +211,45 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 3px;
-  height: 3px;
-  background-color: #fff;
-  box-shadow: 0 0 5px #fff;
-  animation: glitterMove 1.5s linear infinite;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, #fff 0%, #ffeb3b 50%, #fff 100%);
+  box-shadow: 0 0 15px #fff, 0 0 25px #ffeb3b, 0 0 35px #fff;
+  animation: glitterMove 2s linear infinite;
   border-radius: 50%;
 }
 
-.glitter:nth-child(1) {
-  left: 20%;
-  animation-delay: 0s;
-}
-
-.glitter:nth-child(2) {
-  left: 40%;
-  animation-delay: 0.3s;
-}
-
-.glitter:nth-child(3) {
-  left: 60%;
-  animation-delay: 0.6s;
-}
-
-.glitter:nth-child(4) {
-  left: 80%;
-  animation-delay: 0.9s;
-}
-
-.glitter:nth-child(5) {
-  left: 100%;
-  animation-delay: 1.2s;
-}
+.glitter:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
+.glitter:nth-child(2) { left: 25%; top: 60%; animation-delay: 0.2s; }
+.glitter:nth-child(3) { left: 40%; top: 10%; animation-delay: 0.4s; }
+.glitter:nth-child(4) { left: 55%; top: 70%; animation-delay: 0.6s; }
+.glitter:nth-child(5) { left: 70%; top: 30%; animation-delay: 0.8s; }
+.glitter:nth-child(6) { left: 85%; top: 50%; animation-delay: 1.0s; }
+.glitter:nth-child(7) { left: 15%; top: 80%; animation-delay: 1.2s; }
+.glitter:nth-child(8) { left: 35%; top: 40%; animation-delay: 1.4s; }
+.glitter:nth-child(9) { left: 60%; top: 90%; animation-delay: 1.6s; }
+.glitter:nth-child(10) { left: 80%; top: 15%; animation-delay: 1.8s; }
+.glitter:nth-child(11) { left: 5%; top: 45%; animation-delay: 0.1s; }
+.glitter:nth-child(12) { left: 45%; top: 75%; animation-delay: 0.3s; }
+.glitter:nth-child(13) { left: 65%; top: 25%; animation-delay: 0.5s; }
+.glitter:nth-child(14) { left: 90%; top: 65%; animation-delay: 0.7s; }
+.glitter:nth-child(15) { left: 30%; top: 55%; animation-delay: 0.9s; }
 
 @keyframes glitterMove {
   0% {
-    transform: translateY(0) scale(1);
+    transform: translateY(0) scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  20% {
+    transform: translateY(-5px) scale(1) rotate(90deg);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(-15px) scale(1.2) rotate(270deg);
     opacity: 1;
   }
   100% {
-    transform: translateY(-20px) scale(0);
+    transform: translateY(-30px) scale(0) rotate(360deg);
     opacity: 0;
   }
 }

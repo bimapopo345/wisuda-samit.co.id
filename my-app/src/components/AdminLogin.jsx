@@ -15,13 +15,13 @@ function AdminLogin() {
     // Simulate login process
     setTimeout(() => {
       if (username === 'admin' && password === 'admin123') {
-        alert('✅ Login berhasil! Selamat datang Admin.');
-        // You can navigate to admin dashboard later
-        // navigate('/admin-dashboard');
+        console.log('✅ Login berhasil! Redirecting to dashboard...');
+        // Navigate to admin dashboard
+        navigate('/admin-dashboard');
       } else {
         alert('❌ Username atau password salah!');
+        setIsLoading(false);
       }
-      setIsLoading(false);
     }, 1000);
   };
 

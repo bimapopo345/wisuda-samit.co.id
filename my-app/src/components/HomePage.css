@@ -170,6 +170,93 @@
   }
 }
 
+/* Family Title with Glitter */
+.family-title-container {
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.family-title {
+  position: relative;
+  display: inline-block;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: white;
+  text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+  letter-spacing: 3px;
+  opacity: 0;
+  animation: fadeInTitle 1.5s ease-in-out 2s forwards;
+}
+
+.glitter-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.glitter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 3px;
+  background-color: #fff;
+  box-shadow: 0 0 5px #fff;
+  animation: glitterMove 1.5s linear infinite;
+  border-radius: 50%;
+}
+
+.glitter:nth-child(1) {
+  left: 20%;
+  animation-delay: 0s;
+}
+
+.glitter:nth-child(2) {
+  left: 40%;
+  animation-delay: 0.3s;
+}
+
+.glitter:nth-child(3) {
+  left: 60%;
+  animation-delay: 0.6s;
+}
+
+.glitter:nth-child(4) {
+  left: 80%;
+  animation-delay: 0.9s;
+}
+
+.glitter:nth-child(5) {
+  left: 100%;
+  animation-delay: 1.2s;
+}
+
+@keyframes glitterMove {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-20px) scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInTitle {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Form Container */
 .form-container {
   max-width: 800px;
@@ -202,13 +289,18 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .hero h1 {
-    font-size: 1.5rem;
-  }
-
   .family-image {
     width: 95%;
     max-width: 95%;
+  }
+  
+  .family-title {
+    font-size: 2rem;
+    letter-spacing: 2px;
+  }
+  
+  .family-title-container {
+    margin-top: 20px;
   }
 
   .graduation-cap {
@@ -226,13 +318,18 @@
 }
 
 @media (max-width: 480px) {
-  .hero h1 {
-    font-size: 1.3rem;
-  }
-
   .family-image {
     width: 98%;
     max-width: 98%;
+  }
+  
+  .family-title {
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+  }
+  
+  .family-title-container {
+    margin-top: 15px;
   }
 
   .graduation-form {

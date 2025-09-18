@@ -317,15 +317,22 @@ function HomePage() {
       {/* Main Content */}
       <div className="main-content">
         <div className="hero">
-          <div className="text-content">
-            <h1 className="main-heading">家族のこと</h1>
+          <div className="family-title-container">
+            <h2 className="family-title">
+              家族のこと
+              <div className="glitter-container">
+                <span className="glitter"></span>
+                <span className="glitter"></span>
+                <span className="glitter"></span>
+                <span className="glitter"></span>
+                <span className="glitter"></span>
+              </div>
+            </h2>
           </div>
           <div className="family-image-container">
             <img
               src="/keluarga-rame.png"
-              // size
-
-              alt="Keluarga"
+              alt="Keluarga Rame"
               className="family-image"
               onError={(e) => {
                 e.target.style.display = "none";

@@ -308,6 +308,13 @@ function HomePage() {
           <div className="graduation-cap">🎓</div>
           <div className="welcome-text">第9回サミットの卒業式　</div>
           <div className="subtitle">Wisuda LPK SAMIT</div>
+          <div className="hiraku-button-container">
+            <button className="hiraku-button group" onClick={() => setShowWelcome(false)}>
+              <span className="button-text">開く</span>
+              <div className="button-glow"></div>
+              <div className="button-shine"></div>
+            </button>
+          </div>
         </div>
       )}
 

@@ -19,7 +19,6 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  animation: fadeOut 3s ease-in-out 2s forwards;
   color: white;
   text-align: center;
 }
@@ -42,6 +41,82 @@
   font-size: 1.2rem;
   opacity: 0;
   animation: slideIn 1s ease-out 1s forwards;
+}
+
+/* Hiraku Button in Welcome Overlay */
+.hiraku-button-container {
+  margin-top: 30px;
+  opacity: 0;
+  animation: fadeInButton 1.5s ease-in-out 2s forwards;
+}
+
+.hiraku-button {
+  position: relative;
+  padding: 16px 64px;
+  color: white;
+  font-size: 2rem;
+  font-weight: 500;
+  border-radius: 50px;
+  border: none;
+  background: linear-gradient(to right, #d97706, #eab308, #fbbf24);
+  transform: translateY(0);
+  transition: all 0.3s ease-out;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.hiraku-button:hover {
+  background: linear-gradient(to right, #eab308, #fbbf24, #fde047);
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(251, 191, 36, 0.5);
+}
+
+.hiraku-button:active {
+  transform: scale(0.95);
+}
+
+.button-text {
+  position: relative;
+  z-index: 10;
+}
+
+.button-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50px;
+  background: linear-gradient(to right, #fbbf24, #d97706);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  filter: blur(40px);
+}
+
+.hiraku-button:hover .button-glow {
+  opacity: 0.2;
+}
+
+.button-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: 50px;
+  background: linear-gradient(to right, transparent, white, transparent);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  transform: skewX(-12deg);
+}
+
+.hiraku-button:hover .button-shine {
+  opacity: 0.1;
+}
+
+@keyframes fadeInButton {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeOut {

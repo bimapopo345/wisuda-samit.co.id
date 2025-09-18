@@ -45,20 +45,43 @@
 }
 
 @keyframes fadeOut {
-  0% { opacity: 1; }
-  80% { opacity: 1; }
-  100% { opacity: 0; visibility: hidden; }
+  0% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
 
 @keyframes slideIn {
-  0% { opacity: 0; transform: translateY(30px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes bounce {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-10px); }
-  60% { transform: translateY(-5px); }
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
 }
 
 /* Particles Effect */
@@ -110,7 +133,7 @@
 .hero h1 {
   font-size: 2rem;
   margin-bottom: 15px;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* Family Image */
@@ -118,15 +141,14 @@
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
+  width: 100%;
 }
 
 .family-image {
-  max-width: 200px;
-  max-height: 150px;
-  width: auto;
+  width: 100%;
+  max-width: 500px;
   height: auto;
-  border-radius: 15px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+  border-radius: 15px; rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
   opacity: 0;
   animation: fadeInImage 1s ease-in-out 1s forwards;
@@ -134,7 +156,7 @@
 
 .family-image:hover {
   transform: scale(1.05);
-  box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
 }
 
 @keyframes fadeInImage {
@@ -164,12 +186,18 @@
   border: none;
   border-radius: 10px;
   background: white;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 @keyframes fadeInForm {
-  0% { opacity: 0; transform: translateY(20px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Responsive */
@@ -177,20 +205,20 @@
   .hero h1 {
     font-size: 1.5rem;
   }
-  
+
   .family-image {
-    max-width: 150px;
-    max-height: 120px;
+    width: 95%;
+    max-width: 95%;
   }
-  
+
   .graduation-cap {
     font-size: 3rem;
   }
-  
+
   .welcome-text {
     font-size: 1.5rem;
   }
-  
+
   .graduation-form {
     height: 85vh;
     min-height: 600px;
@@ -201,12 +229,12 @@
   .hero h1 {
     font-size: 1.3rem;
   }
-  
+
   .family-image {
-    max-width: 120px;
-    max-height: 100px;
+    width: 98%;
+    max-width: 98%;
   }
-  
+
   .graduation-form {
     height: 90vh;
     min-height: 550px;
@@ -225,7 +253,7 @@
   background: rgba(255, 255, 255, 0.9);
   padding: 10px 15px;
   border-radius: 25px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
 }
 
@@ -258,9 +286,15 @@
 }
 
 @keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7); }
-  70% { box-shadow: 0 0 0 10px rgba(102, 126, 234, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0); }
+  0% {
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(102, 126, 234, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+  }
 }
 
 .audio-status {
@@ -282,13 +316,13 @@ audio {
     right: 15px;
     padding: 8px 12px;
   }
-  
+
   .audio-btn {
     width: 35px;
     height: 35px;
     font-size: 14px;
   }
-  
+
   .audio-status {
     font-size: 11px;
   }

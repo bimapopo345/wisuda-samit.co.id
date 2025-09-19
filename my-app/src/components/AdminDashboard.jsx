@@ -225,15 +225,19 @@ function AdminDashboard() {
   };
 
   const handleExportData = () => {
-    // Create Excel-compatible CSV content with updated form labels
+    // Create CSV with EXACTLY 14 columns (A to N) to match Google Sheets
     const headers = [
-      'Timestamp', 'Mohon isi nama lengkap Kamu', 'Kamu berapa bersaudara kah?', 'Kamu anak ke berapa kah?', 
-      'Apakah Bapak & Ibu Kandung masih ada?', 'Apakah saat ini mereka masih tinggal bersama?',
-      'Dengan siapa Kamu tinggal terakhir kalinya sebelum masuk SAMIT?', 
-      'Sejak kecil hingga dewasa, dengan siapa Kamu tinggal paling lama?', 
+      'Timestamp',
+      'Mohon isi nama lengkap Kamu',
+      'Kamu berapa bersaudara kah?',
+      'Kamu anak ke berapa kah?',
+      'Apakah Bapak & Ibu Kandung masih ada?',
+      'Apakah saat ini mereka masih tinggal bersama?',
+      'Dengan siapa Kamu tinggal terakhir kalinya sebelum masuk SAMIT?',
+      'Sejak kecil hingga dewasa, dengan siapa Kamu tinggal paling lama?',
       'Sebutkan satu saja, orang yang paling bernilai & bermakna di hidup Kamu selama ini',
       'Kenapa orang tersebut sangat begitu berharga & berarti di hidup Kamu?',
-      'Apa yang ingin sekali Kamu katakan saat ini kepada orang tersebut?', 
+      'Apa yang ingin sekali Kamu katakan saat ini kepada orang tersebut?',
       'Jika suatu saat nanti Kamu telah sukses & semua cita-citamu tercapai, apa yang ingin sekali Kamu berikan kepada orang tersebut?',
       'Email Address',
       'Apa harapan Kamu terhadapnya terutama ketika nanti Kamu pergi jauh & sudah tinggal di Jepang?'
@@ -243,20 +247,20 @@ function AdminDashboard() {
     const csvContent = [
       headers.join(','),
       ...filteredStudents.map(student => [
-        `"'${student.timestamp}"`,
-        `"${student.namaLengkap.replace(/"/g, '""')}"`,
-        `"${student.berapaBersaudara}"`,
-        `"${student.anakKe}"`,
-        `"${student.orangTuaAda}"`,
-        `"${student.orangTuaBersama}"`,
-        `"${student.terakhirTinggal.replace(/"/g, '""')}"`,
-        `"${student.dariKecilTinggal.replace(/"/g, '""')}"`,
-        `"${student.orangBernilai.replace(/"/g, '""')}"`,
-        `"${student.kenapa.replace(/"/g, '""')}"`,
-        `"${student.inginKatakan.replace(/"/g, '""')}"`,
-        `"${student.akanDiberikan.replace(/"/g, '""')}"`,
-        `"${student.email}"`,
-        `"${student.harapan.replace(/"/g, '""')}"`
+        `"'${student.timestamp}"`,                                    // A: Timestamp
+        `"${(student.namaLengkap || '').replace(/"/g, '""')}"`,       // B: Nama lengkap
+        `"${student.berapaBersaudara || ''}"`,                        // C: Berapa bersaudara
+        `"${student.anakKe || ''}"`,                                  // D: Anak ke
+        `"${student.orangTuaAda || ''}"`,                             // E: Orang tua ada
+        `"${student.orangTuaBersama || ''}"`,                         // F: Tinggal bersama
+        `"${(student.terakhirTinggal || '').replace(/"/g, '""')}"`,   // G: Terakhir tinggal
+        `"${(student.dariKecilTinggal || '').replace(/"/g, '""')}"`,  // H: Dari kecil tinggal
+        `"${(student.orangBernilai || '').replace(/"/g, '""')}"`,     // I: Orang bernilai
+        `"${(student.kenapa || '').replace(/"/g, '""')}"`,            // J: Kenapa berharga
+        `"${(student.inginKatakan || '').replace(/"/g, '""')}"`,      // K: Ingin katakan
+        `"${(student.akanDiberikan || '').replace(/"/g, '""')}"`,     // L: Akan diberikan
+        `"${student.email || ''}"`,                                   // M: Email
+        `"${(student.harapan || '').replace(/"/g, '""')}"`            // N: Harapan
       ].join(','))
     ].join('\n');
 

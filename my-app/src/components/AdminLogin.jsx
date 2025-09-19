@@ -1,10 +1,10 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './AdminLogin.css';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./AdminLogin.css";
 
 function AdminLogin() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -14,19 +14,19 @@ function AdminLogin() {
 
     // Simulate login process
     setTimeout(() => {
-      if (username === 'admin' && password === 'admin123') {
-        console.log('✅ Login berhasil! Redirecting to dashboard...');
+      if (username === "admin" && password === "admin123") {
+        console.log("✅ Login berhasil! Redirecting to dashboard...");
         // Navigate to admin dashboard
-        navigate('/admin-dashboard');
+        navigate("/admin-dashboard");
       } else {
-        alert('❌ Username atau password salah!');
+        alert("❌ Username atau password salah!");
         setIsLoading(false);
       }
     }, 1000);
   };
 
   const handleBackToHome = () => {
-    navigate('/');
+    navigate("/");
   };
 
   return (
@@ -64,19 +64,23 @@ function AdminLogin() {
             />
           </div>
 
-          <button type="submit" className="btn btn-primary" disabled={isLoading}>
-            {isLoading ? '⏳ Memproses...' : '🚀 Masuk'}
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={isLoading}
+          >
+            {isLoading ? "⏳ Memproses..." : "🚀 Masuk"}
           </button>
 
-          <div className="login-info">
+          {/* <div className="login-info">
             <p>Demo Credentials:</p>
             <p><strong>Username:</strong> admin</p>
             <p><strong>Password:</strong> admin123</p>
-          </div>
+          </div> */}
 
-          <button 
-            type="button" 
-            className="btn btn-secondary" 
+          <button
+            type="button"
+            className="btn btn-secondary"
             onClick={handleBackToHome}
             disabled={isLoading}
           >

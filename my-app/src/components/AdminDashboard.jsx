@@ -159,21 +159,23 @@ function AdminDashboard() {
         }
         columns.push(current.trim()); // Add last column
         
-        // Map to our data structure
+        // Map to our data structure with new field names
         return {
           id: index + 1,
           timestamp: columns[0] || '',
           namaLengkap: columns[1] || '',
           berapaBersaudara: columns[2] || '',
           anakKe: columns[3] || '',
-          orangTuaLengkap: columns[4] || '',
-          terakhirTinggal: columns[5] || '',
-          dariKecilTinggal: columns[6] || '',
-          orangBernilai: columns[7] || '',
-          inginKatakan: columns[8] || '',
-          akanDiberikan: columns[9] || '',
-          kenapa: columns[10] || '',
-          harapan: columns[11] || ''
+          orangTuaAda: columns[4] || '',
+          orangTuaBersama: columns[5] || '',
+          terakhirTinggal: columns[6] || '',
+          dariKecilTinggal: columns[7] || '',
+          orangBernilai: columns[8] || '',
+          kenapa: columns[9] || '',
+          inginKatakan: columns[10] || '',
+          akanDiberikan: columns[11] || '',
+          email: columns[12] || '',
+          harapan: columns[13] || ''
         };
       }).filter(item => item.namaLengkap); // Filter out empty rows
       
@@ -221,31 +223,37 @@ function AdminDashboard() {
   };
 
   const handleExportData = () => {
-    // Create Excel-compatible CSV content
+    // Create Excel-compatible CSV content with updated form labels
     const headers = [
-      'Timestamp', 'Nama Lengkap', 'Berapa bersaudara?', 'Anak ke berapa?', 
-      'Apakah Bapak & Ibu Kandung masih lengkap?', 'Terakhir tinggal paling lama dengan siapa?', 
-      'Dari kecil hingga dewasa tinggal dengan siapa?', '(Sebutkan satu saja) orang yang paling bernilai di hidup Kamu!', 
+      'Timestamp', 'Mohon isi nama lengkap Kamu', 'Kamu berapa bersaudara kah?', 'Kamu anak ke berapa kah?', 
+      'Apakah Bapak & Ibu Kandung masih ada?', 'Apakah saat ini mereka masih tinggal bersama?',
+      'Dengan siapa Kamu tinggal terakhir kalinya sebelum masuk SAMIT?', 
+      'Sejak kecil hingga dewasa, dengan siapa Kamu tinggal paling lama?', 
+      'Sebutkan satu saja, orang yang paling bernilai & bermakna di hidup Kamu selama ini',
+      'Kenapa orang tersebut sangat begitu berharga & berarti di hidup Kamu?',
       'Apa yang ingin sekali Kamu katakan saat ini kepada orang tersebut?', 
-      'Jika nanti sukses & semua cita-citamu tercapai, apa yang akan Kamu berikan kepada orang tersebut?', 
-      'Kenapa orang tersebut begitu sangat berarti di hidup Kamu?', 'Apa harapan Kamu terhadapnya kedepan?'
+      'Jika suatu saat nanti Kamu telah sukses & semua cita-citamu tercapai, apa yang ingin sekali Kamu berikan kepada orang tersebut?',
+      'Email Address',
+      'Apa harapan Kamu terhadapnya terutama ketika nanti Kamu pergi jauh & sudah tinggal di Jepang?'
     ];
     
     // Create CSV content with proper escaping
     const csvContent = [
       headers.join(','),
       ...filteredStudents.map(student => [
-        `"'${student.timestamp}"`, // Add apostrophe prefix to force text in Excel
+        `"'${student.timestamp}"`,
         `"${student.namaLengkap.replace(/"/g, '""')}"`,
         `"${student.berapaBersaudara}"`,
         `"${student.anakKe}"`,
-        `"${student.orangTuaLengkap.replace(/"/g, '""')}"`,
+        `"${student.orangTuaAda}"`,
+        `"${student.orangTuaBersama}"`,
         `"${student.terakhirTinggal.replace(/"/g, '""')}"`,
         `"${student.dariKecilTinggal.replace(/"/g, '""')}"`,
         `"${student.orangBernilai.replace(/"/g, '""')}"`,
+        `"${student.kenapa.replace(/"/g, '""')}"`,
         `"${student.inginKatakan.replace(/"/g, '""')}"`,
         `"${student.akanDiberikan.replace(/"/g, '""')}"`,
-        `"${student.kenapa.replace(/"/g, '""')}"`,
+        `"${student.email}"`,
         `"${student.harapan.replace(/"/g, '""')}"`
       ].join(','))
     ].join('\n');
@@ -369,7 +377,7 @@ function AdminDashboard() {
                     <strong>Berapa bersaudara:</strong> {student.berapaBersaudara} (Anak ke-{student.anakKe})
                   </div>
                   <div className="info-item">
-                    <strong>Bapak & Ibu Kandung:</strong> {student.orangTuaLengkap}
+                    <strong>Bapak & Ibu Kandung:</strong> {student.orangTuaAda} | Tinggal bersama: {student.orangTuaBersama}
                   </div>
                   <div className="info-item">
                     <strong>Orang paling bernilai:</strong> {student.orangBernilai}
@@ -377,6 +385,11 @@ function AdminDashboard() {
                   <div className="info-item message">
                     <strong>Ingin katakan:</strong> "{student.inginKatakan}"
                   </div>
+                  {student.email && (
+                    <div className="info-item">
+                      <strong>Email:</strong> {student.email}
+                    </div>
+                  )}
                 </div>
 
                 <button 
@@ -399,7 +412,7 @@ function AdminDashboard() {
                     <th>Nama Lengkap</th>
                     <th>Bersaudara</th>
                     <th>Anak Ke</th>
-                    <th>Orang Tua</th>
+                    <th>Orang Tua Ada</th>
                     <th>Orang Bernilai</th>
                     <th>Pesan</th>
                     <th>Aksi</th>
@@ -413,7 +426,7 @@ function AdminDashboard() {
                       <td className="name-cell">{student.namaLengkap}</td>
                       <td>{student.berapaBersaudara}</td>
                       <td>{student.anakKe}</td>
-                      <td>{student.orangTuaLengkap}</td>
+                      <td>{student.orangTuaAda}</td>
                       <td className="valuable-person-cell">{student.orangBernilai}</td>
                       <td className="message-cell">
                         <span className="message-preview">
@@ -460,21 +473,31 @@ function AdminDashboard() {
                 <h3>📝 Informasi Dasar</h3>
                 <div className="detail-grid">
                   <div className="detail-item">
-                    <label>Nama Lengkap:</label>
+                    <label>Mohon isi nama lengkap Kamu:</label>
                     <span>{selectedStudent.namaLengkap}</span>
                   </div>
                   <div className="detail-item">
-                    <label>Berapa bersaudara?</label>
+                    <label>Kamu berapa bersaudara kah?</label>
                     <span>{selectedStudent.berapaBersaudara}</span>
                   </div>
                   <div className="detail-item">
-                    <label>Anak ke berapa?</label>
+                    <label>Kamu anak ke berapa kah?</label>
                     <span>{selectedStudent.anakKe}</span>
                   </div>
                   <div className="detail-item">
-                    <label>Apakah Bapak & Ibu Kandung masih lengkap?</label>
-                    <span>{selectedStudent.orangTuaLengkap}</span>
+                    <label>Apakah Bapak & Ibu Kandung masih ada?</label>
+                    <span>{selectedStudent.orangTuaAda}</span>
                   </div>
+                  <div className="detail-item">
+                    <label>Apakah saat ini mereka masih tinggal bersama?</label>
+                    <span>{selectedStudent.orangTuaBersama}</span>
+                  </div>
+                  {selectedStudent.email && (
+                    <div className="detail-item">
+                      <label>Email Address:</label>
+                      <span>{selectedStudent.email}</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -482,11 +505,11 @@ function AdminDashboard() {
                 <h3>🏠 Informasi Tempat Tinggal</h3>
                 <div className="detail-grid">
                   <div className="detail-item">
-                    <label>Terakhir tinggal paling lama dengan siapa?</label>
+                    <label>Dengan siapa Kamu tinggal terakhir kalinya sebelum masuk SAMIT?</label>
                     <span>{selectedStudent.terakhirTinggal}</span>
                   </div>
                   <div className="detail-item">
-                    <label>Dari kecil hingga dewasa tinggal dengan siapa?</label>
+                    <label>Sejak kecil hingga dewasa, dengan siapa Kamu tinggal paling lama?</label>
                     <span>{selectedStudent.dariKecilTinggal}</span>
                   </div>
                 </div>
@@ -496,23 +519,23 @@ function AdminDashboard() {
                 <h3>❤️ Orang yang Paling Bernilai</h3>
                 <div className="detail-grid">
                   <div className="detail-item full-width">
-                    <label>(Sebutkan satu saja) orang yang paling bernilai di hidup Kamu!</label>
+                    <label>Sebutkan satu saja, orang yang paling bernilai & bermakna di hidup Kamu selama ini:</label>
                     <span>{selectedStudent.orangBernilai}</span>
+                  </div>
+                  <div className="detail-item full-width">
+                    <label>Kenapa orang tersebut sangat begitu berharga & berarti di hidup Kamu?</label>
+                    <span>{selectedStudent.kenapa}</span>
                   </div>
                   <div className="detail-item full-width">
                     <label>Apa yang ingin sekali Kamu katakan saat ini kepada orang tersebut?</label>
                     <span>"{selectedStudent.inginKatakan}"</span>
                   </div>
                   <div className="detail-item full-width">
-                    <label>Jika nanti sukses & semua cita-citamu tercapai, apa yang akan Kamu berikan kepada orang tersebut?</label>
+                    <label>Jika suatu saat nanti Kamu telah sukses & semua cita-citamu tercapai, apa yang ingin sekali Kamu berikan kepada orang tersebut?</label>
                     <span>{selectedStudent.akanDiberikan}</span>
                   </div>
                   <div className="detail-item full-width">
-                    <label>Kenapa orang tersebut begitu sangat berarti di hidup Kamu?</label>
-                    <span>{selectedStudent.kenapa}</span>
-                  </div>
-                  <div className="detail-item full-width">
-                    <label>Apa harapan Kamu terhadapnya kedepan?</label>
+                    <label>Apa harapan Kamu terhadapnya terutama ketika nanti Kamu pergi jauh & sudah tinggal di Jepang?</label>
                     <span>{selectedStudent.harapan}</span>
                   </div>
                 </div>

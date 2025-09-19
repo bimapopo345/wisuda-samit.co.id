@@ -243,34 +243,54 @@ function AdminDashboard() {
       'Apa harapan Kamu terhadapnya terutama ketika nanti Kamu pergi jauh & sudah tinggal di Jepang?'
     ];
     
-    // Create CSV content with proper escaping
-    const csvContent = [
-      headers.join(','),
-      ...filteredStudents.map(student => [
-        `"'${student.timestamp}"`,                                    // A: Timestamp
-        `"${(student.namaLengkap || '').replace(/"/g, '""')}"`,       // B: Nama lengkap
-        `"${student.berapaBersaudara || ''}"`,                        // C: Berapa bersaudara
-        `"${student.anakKe || ''}"`,                                  // D: Anak ke
-        `"${student.orangTuaAda || ''}"`,                             // E: Orang tua ada
-        `"${student.orangTuaBersama || ''}"`,                         // F: Tinggal bersama
-        `"${(student.terakhirTinggal || '').replace(/"/g, '""')}"`,   // G: Terakhir tinggal
-        `"${(student.dariKecilTinggal || '').replace(/"/g, '""')}"`,  // H: Dari kecil tinggal
-        `"${(student.orangBernilai || '').replace(/"/g, '""')}"`,     // I: Orang bernilai
-        `"${(student.kenapa || '').replace(/"/g, '""')}"`,            // J: Kenapa berharga
-        `"${(student.inginKatakan || '').replace(/"/g, '""')}"`,      // K: Ingin katakan
-        `"${(student.akanDiberikan || '').replace(/"/g, '""')}"`,     // L: Akan diberikan
-        `"${student.email || ''}"`,                                   // M: Email
-        `"${(student.harapan || '').replace(/"/g, '""')}"`            // N: Harapan
-      ].join(','))
-    ].join('\n');
+    // Debug: Log headers count
+    console.log('Headers count:', headers.length);
+    
+    // Properly escape CSV data with quotes for fields containing commas
+    const escapeCSV = (value) => {
+      if (!value) return '""';
+      const str = String(value);
+      // If contains comma, newline, or quote, wrap in quotes and escape internal quotes
+      if (str.includes(',') || str.includes('\n') || str.includes('"')) {
+        return `"${str.replace(/"/g, '""')}"`;
+      }
+      return `"${str}"`;
+    };
+    
+    // Create CSV content - EXACTLY 14 columns only
+    const dataRows = filteredStudents.map(student => {
+      const row = [
+        escapeCSV(student.timestamp || ''),         // A: Timestamp
+        escapeCSV(student.namaLengkap || ''),       // B: Nama lengkap
+        escapeCSV(student.berapaBersaudara || ''),  // C: Berapa bersaudara
+        escapeCSV(student.anakKe || ''),            // D: Anak ke
+        escapeCSV(student.orangTuaAda || ''),       // E: Orang tua ada
+        escapeCSV(student.orangTuaBersama || ''),   // F: Tinggal bersama
+        escapeCSV(student.terakhirTinggal || ''),   // G: Terakhir tinggal
+        escapeCSV(student.dariKecilTinggal || ''),  // H: Dari kecil tinggal
+        escapeCSV(student.orangBernilai || ''),     // I: Orang bernilai
+        escapeCSV(student.kenapa || ''),            // J: Kenapa berharga
+        escapeCSV(student.inginKatakan || ''),      // K: Ingin katakan
+        escapeCSV(student.akanDiberikan || ''),     // L: Akan diberikan
+        escapeCSV(student.email || ''),             // M: Email
+        escapeCSV(student.harapan || '')            // N: Harapan
+      ];
+      
+      console.log('Row length:', row.length);
+      return row.join(','); // Proper CSV with comma separator
+    });
+    
+    // Escape headers too (they might contain commas)
+    const escapedHeaders = headers.map(header => escapeCSV(header));
+    const csvContent = [escapedHeaders.join(','), ...dataRows].join('\n');
 
     // Add BOM for proper UTF-8 encoding in Excel
     const BOM = '\uFEFF';
     const csvWithBOM = BOM + csvContent;
     
-    // Create and download as Excel-compatible CSV
+    // Create and download as proper CSV
     const blob = new Blob([csvWithBOM], { 
-      type: 'application/vnd.ms-excel;charset=utf-8;' 
+      type: 'text/csv;charset=utf-8;' 
     });
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
@@ -282,7 +302,7 @@ function AdminDashboard() {
     document.body.removeChild(link);
     
     // Show success message
-    alert('✅ Data berhasil di-export ke Excel CSV!\n\n📄 File dapat langsung dibuka dengan Excel\n⏰ Timestamp akan tampil dengan format yang benar');
+    alert('✅ Data berhasil di-export ke CSV!\n\n📄 File CSV dengan proper escaping\n🔍 Exactly 14 columns (A to N)\n📝 Koma dalam teks sudah di-handle dengan benar!');
   };
 
   if (loading) {

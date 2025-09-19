@@ -159,23 +159,25 @@ function AdminDashboard() {
         }
         columns.push(current.trim()); // Add last column
         
-        // Map to our data structure with new field names
+        // Map to our data structure - CHECK ORDER CAREFULLY based on real data
+        // Real data example:
+        // 9/19/2025 9:52:11, Sabil, 3, 5, Ada, Iya, Orang Tua, Orang Tua, Adhe, Teman kerja Lama, pengen makan bakso ikan, Bakso Ikan, , Semoga Dibawakan Bakso Ikan
         return {
           id: index + 1,
-          timestamp: columns[0] || '',
-          namaLengkap: columns[1] || '',
-          berapaBersaudara: columns[2] || '',
-          anakKe: columns[3] || '',
-          orangTuaAda: columns[4] || '',
-          orangTuaBersama: columns[5] || '',
-          terakhirTinggal: columns[6] || '',
-          dariKecilTinggal: columns[7] || '',
-          orangBernilai: columns[8] || '',
-          kenapa: columns[9] || '',
-          inginKatakan: columns[10] || '',
-          akanDiberikan: columns[11] || '',
-          email: columns[12] || '',
-          harapan: columns[13] || ''
+          timestamp: columns[0] || '',               // 9/19/2025 9:52:11
+          namaLengkap: columns[1] || '',             // Sabil
+          berapaBersaudara: columns[2] || '',        // 3
+          anakKe: columns[3] || '',                  // 5
+          orangTuaAda: columns[4] || '',             // Ada
+          orangTuaBersama: columns[5] || '',         // Iya
+          terakhirTinggal: columns[6] || '',         // Orang Tua
+          dariKecilTinggal: columns[7] || '',        // Orang Tua
+          orangBernilai: columns[8] || '',           // Adhe
+          kenapa: columns[9] || '',                  // Teman kerja Lama
+          inginKatakan: columns[10] || '',           // pengen makan bakso ikan
+          akanDiberikan: columns[11] || '',          // Bakso Ikan
+          email: columns[12] || '',                  // (empty)
+          harapan: columns[13] || ''                 // Semoga Dibawakan Bakso Ikan
         };
       }).filter(item => item.namaLengkap); // Filter out empty rows
       

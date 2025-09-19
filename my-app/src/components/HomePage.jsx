@@ -374,7 +374,7 @@ function HomePage() {
       </div>
 
       {/* Audio Controls */}
-      <div className="audio-controls">
+      {/* <div className="audio-controls">
         <button
           className={`audio-btn ${isPlaying ? "playing" : "paused"}`}
           onClick={toggleMusic}
@@ -391,7 +391,7 @@ function HomePage() {
               : "Playing"
             : "Click to play"}
         </span>
-      </div>
+      </div> */}
 
       {/* Background Music */}
       <audio

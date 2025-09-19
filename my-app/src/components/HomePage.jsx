@@ -349,11 +349,9 @@ function HomePage() {
                 <span className="glitter"></span>
               </div>
             </h2>
-            <div className="family-subtitle">
-              教えてくれませんか。
-            </div>
+            <div className="family-subtitle">教えてください</div>
           </div>
-          <div className="family-image-container">
+          {/* <div className="family-image-container">
             <img
               src="/keluarga-rame.png"
               alt="Keluarga Rame"
@@ -362,7 +360,7 @@ function HomePage() {
                 e.target.style.display = "none";
               }}
             />
-          </div>
+          </div> */}
         </div>
 
         {/* Google Form Iframe */}
@@ -420,7 +418,7 @@ function HomePage() {
         }}
         onError={(e) => console.log("❌ Audio error:", e)}
       >
-        <source src="/memories.mp3" type="audio/mpeg" />
+        <source src="/memories-2.mp3" type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
     </div>
